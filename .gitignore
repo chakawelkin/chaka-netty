@@ -30,14 +30,3 @@ target/
 .DS_Store
 Thumbs.db
 *.orig
-
-# flatten ignore
-.flattened-pom.xml
-
-# license check result
-license-list
-
-# grpc compiler
-compiler/gradle.properties
-compiler/build/*
-compiler/.gradle/*
