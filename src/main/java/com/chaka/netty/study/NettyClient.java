@@ -25,7 +25,7 @@ public class NettyClient {
                     }
                 });
 
-        ChannelFuture cf = bootstrap.connect("127.0.0.1", 8080).sync();
+        ChannelFuture cf = bootstrap.connect("127.0.0.1", 8000).sync();
 
         cf.channel().writeAndFlush(new Date() + ": hello world!");
         /*while (true){
