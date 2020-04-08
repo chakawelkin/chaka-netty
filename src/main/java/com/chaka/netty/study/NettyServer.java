@@ -1,6 +1,6 @@
 package com.chaka.netty.study;
 
-import com.chaka.netty.study.handler.FirstServerHandler;
+import com.chaka.netty.study.handler.ServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -14,37 +14,28 @@ import io.netty.util.concurrent.GenericFutureListener;
  */
 public class NettyServer {
 
+    private static final int PORT = 8000;
+
     public static void main(String[] args) {
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         NioEventLoopGroup boss = new NioEventLoopGroup();
         NioEventLoopGroup worker = new NioEventLoopGroup();
 
         serverBootstrap.group(boss,worker)
-                .channel(NioServerSocketChannel.class)//指定IO模型为NIO,如果使用BIO 就是OioServerSocketChannel
-                // handler用于服务端启动过程中的一些逻辑
-                .handler(new ChannelInitializer<NioServerSocketChannel>() {
-                    @Override
-                    protected void initChannel(NioServerSocketChannel ch) throws Exception {
-                        System.out.println("服务端启动中!");
-                    }
-                })
-                //用于指定处理新连接数据的读写处理逻辑
+                .channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new FirstServerHandler());
+                        ch.pipeline().addLast(new ServerHandler());
                     }
                 });
 
         //2.自动绑定递增端口
-        serverBootstrap.bind(8000).addListener(new GenericFutureListener<Future<? super Void>>() {
-            @Override
-            public void operationComplete(Future<? super Void> future) throws Exception {
-                if (future.isSuccess()){
-                    System.out.println("端口绑定成功!");
-                }else {
-                    System.err.println("端口绑定失败!");
-                }
+        serverBootstrap.bind(PORT).addListener(future -> {
+            if (future.isSuccess()){
+                System.out.println("端口["+ PORT +"]绑定成功!");
+            }else {
+                System.err.println("端口绑定失败!");
             }
         });
     }

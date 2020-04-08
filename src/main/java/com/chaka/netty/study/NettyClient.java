@@ -1,6 +1,6 @@
 package com.chaka.netty.study;
 
-import com.chaka.netty.study.handler.FirstClientHandler;
+import com.chaka.netty.study.handler.ClientHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -18,7 +18,7 @@ public class NettyClient {
                 .handler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel ch) throws Exception {
-                        ch.pipeline().addLast(new FirstClientHandler());
+                        ch.pipeline().addLast(new ClientHandler());
                     }
                 });
 
