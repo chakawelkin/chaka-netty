@@ -1,6 +1,5 @@
 package com.chaka.netty.study.handler;
 
-import com.alibaba.fastjson.JSON;
 import com.chaka.netty.study.codec.PacketCodec;
 import com.chaka.netty.study.protocol.LoginRequestPacket;
 import com.chaka.netty.study.protocol.LoginResponsePacket;
@@ -36,7 +35,10 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 
         if (packet instanceof LoginResponsePacket){
             LoginResponsePacket responsePacket = (LoginResponsePacket)packet;
-            System.out.println(JSON.toJSONString(responsePacket));
+            if(responsePacket.getSuccess()){
+                System.out.println("客户端登录成功");
+                ctx.channel().attr(Attributes.HAS_LOGIN).set(true);
+            }
         }
     }
 }

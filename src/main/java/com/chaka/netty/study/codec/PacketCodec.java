@@ -1,9 +1,6 @@
 package com.chaka.netty.study.codec;
 
-import com.chaka.netty.study.protocol.Command;
-import com.chaka.netty.study.protocol.LoginRequestPacket;
-import com.chaka.netty.study.protocol.LoginResponsePacket;
-import com.chaka.netty.study.protocol.Packet;
+import com.chaka.netty.study.protocol.*;
 import com.chaka.netty.study.serialize.Serializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -26,6 +23,8 @@ public class PacketCodec {
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(Command.LOGIN_REQUEST,LoginRequestPacket.class);
         packetTypeMap.put(Command.LOGIN_RESPONSE, LoginResponsePacket.class);
+        packetTypeMap.put(Command.MESSAGE_REQUEST, MessageRequestPacket.class);
+        packetTypeMap.put(Command.MESSAGE_RESPONSE, MessageResponsePacket.class);
     }
 
     public ByteBuf encode(ByteBufAllocator byteBufAllocator, Packet packet){
