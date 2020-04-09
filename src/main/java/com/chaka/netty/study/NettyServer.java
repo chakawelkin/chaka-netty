@@ -1,13 +1,14 @@
 package com.chaka.netty.study;
 
+import com.chaka.netty.study.handler.inbound.InBoundHandlerA;
+import com.chaka.netty.study.handler.inbound.InBoundHandlerB;
+import com.chaka.netty.study.handler.outbound.OutBoundHandlerA;
+import com.chaka.netty.study.handler.outbound.OutBoundHandlerB;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
 
 public class NettyServer {
 
@@ -16,19 +17,16 @@ public class NettyServer {
         NioEventLoopGroup boss = new NioEventLoopGroup();
         NioEventLoopGroup worker = new NioEventLoopGroup();
 
-        serverBootstrap.group(boss,worker)
+        serverBootstrap.group(boss, worker)
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new StringDecoder());
-                        ch.pipeline().addLast(new SimpleChannelInboundHandler<String>() {
-                            @Override
-                            protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
-                                System.out.println("收到客户端发送的消息");
-                                System.out.println(msg);
-                            }
-                        });
+                        ch.pipeline().addLast(new InBoundHandlerA());
+                        ch.pipeline().addLast(new InBoundHandlerB());
+
+                        ch.pipeline().addLast(new OutBoundHandlerA());
+                        ch.pipeline().addLast(new OutBoundHandlerB());
                     }
                 }).bind(8080);
     }
